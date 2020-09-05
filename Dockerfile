@@ -3,8 +3,9 @@ FROM gitpod/workspace-full:latest
 USER root
 
 RUN apt-get update -y
-RUN apt-get install -y gcc make build-essential wget curl unzip apt-utils xz-utils libkrb5-dev gradle libpulse0
-RUN apt-get --purge remove -y openjdk-11-jdk
+RUN apt-get install -y gcc make build-essential wget curl unzip apt-utils xz-utils libkrb5-dev gradle libpulse0 adb
+RUN echo y | apt-get purge openjdk-*-*
+RUN apt-get -y autoremove
 RUN apt-get install -y openjdk-8-jdk
 
 USER gitpod
@@ -36,11 +37,8 @@ RUN $FLUTTER_HOME/bin/flutter channel beta
 RUN $FLUTTER_HOME/bin/flutter upgrade
 RUN $FLUTTER_HOME/bin/flutter precache
 RUN $FLUTTER_HOME/bin/flutter config --no-analytics
-RUN yes "y" | $FLUTTER_HOME/bin/flutter doctor --android-licenses -v
+RUN echo y | $FLUTTER_HOME/bin/flutter doctor --android-licenses -v
 ENV PUB_CACHE=/workspace/.pub_cache
-
-# Hygen
-RUN npm i -g hygen
 
 # Env
 RUN echo 'export PATH=${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin:${PUB_CACHE}/bin:${FLUTTER_HOME}/.pub-cache/bin:$PATH' >>~/.bashrc
