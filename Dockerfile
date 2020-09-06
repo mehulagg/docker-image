@@ -4,8 +4,9 @@ USER root
 
 RUN apt-get update -y
 RUN apt-get install -y gcc make build-essential wget curl unzip apt-utils xz-utils libkrb5-dev gradle libpulse0 adb
-RUN echo y | apt-get purge openjdk-*-*
+RUN apt-get purge -y openjdk-11-jre-headless:amd64
 RUN apt-get -y autoremove
+RUN apt-get upgrade -y
 RUN apt-get install -y openjdk-8-jdk
 
 USER gitpod
@@ -37,7 +38,7 @@ RUN $FLUTTER_HOME/bin/flutter channel beta
 RUN $FLUTTER_HOME/bin/flutter upgrade
 RUN $FLUTTER_HOME/bin/flutter precache
 RUN $FLUTTER_HOME/bin/flutter config --no-analytics
-RUN echo y | $FLUTTER_HOME/bin/flutter doctor --android-licenses -v
+RUN yes "y" | $FLUTTER_HOME/bin/flutter doctor --android-licenses -v
 ENV PUB_CACHE=/workspace/.pub_cache
 
 # Env
