@@ -1,5 +1,7 @@
 From ubuntu:latest
 
+USER root
+
 RUN sudo apt-get update
 RUN sudo apt-get install -y curl openssh-server ca-certificates tzdata
 RUN sudo apt-get install -y postfix
