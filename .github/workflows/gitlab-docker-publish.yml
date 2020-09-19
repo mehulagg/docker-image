@@ -26,6 +26,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Show ip address
+        run: ip addr show
 
       - name: Build image
         run: docker build . --file ./gitlab/Dockerfile --tag $IMAGE_NAME
