@@ -1,46 +1,25 @@
-FROM gitpod/workspace-full:latest
+FROM gitpod/workspace-full-vnc
+
+ENV ANDROID_HOME=/home/gitpod/Android/Sdk \
+    FLUTTER_HOME=/home/gitpod/flutter \
+    PATH=$FLUTTER_HOME/bin:$ANDROID_HOME/tools:$PATH
 
 USER root
 
-RUN apt-get update -y
-RUN apt-get install -y gcc make build-essential wget curl unzip apt-utils xz-utils libkrb5-dev gradle libpulse0 adb
-RUN apt-get purge -y openjdk-11-jre-headless:amd64
-RUN apt-get -y autoremove
-RUN apt-get upgrade -y
-RUN apt-get install -y openjdk-8-jdk
-RUN rm -rf /usr/lib/android-sdk
+RUN curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && add-apt-repository ppa:git-core/ppa \
+    && apt update; apt install -y git \
+    && install-packages build-essential libkrb5-dev gcc make gradle android-tools-adb android-tools-fastboot
 
 USER gitpod
 
-# Android
-ENV JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64
-ENV ANDROID_HOME="/home/gitpod/.android"
-ENV ANDROID_SDK_URL="https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip"
-ENV ANDROID_SDK_ARCHIVE="${ANDROID_HOME}/archive"
-ENV ANDROID_STUDIO_PATH="/home/gitpod/"
-
-RUN cd "${ANDROID_STUDIO_PATH}"
-RUN wget -qO android_studio.zip https://dl.google.com/dl/android/studio/ide-zips/3.3.0.20/android-studio-ide-182.5199772-linux.zip
-RUN unzip android_studio.zip
-RUN rm -f android_studio.zip
-
-RUN mkdir -p "${ANDROID_HOME}"
-RUN touch $ANDROID_HOME/repositories.cfg
-RUN wget -q "${ANDROID_SDK_URL}" -O "${ANDROID_SDK_ARCHIVE}"
-RUN unzip -q -d "${ANDROID_HOME}" "${ANDROID_SDK_ARCHIVE}"
-RUN echo y | "${ANDROID_HOME}/tools/bin/sdkmanager" "platform-tools" "platforms;android-28" "build-tools;28.0.3"
-RUN echo y | "${ANDROID_HOME}/tools/bin/sdkmanager" "platform-tools" "platforms;android-29" "build-tools;29.0.3"
-RUN rm "${ANDROID_SDK_ARCHIVE}"
-
-# Flutter
-ENV FLUTTER_HOME="/home/gitpod/flutter"
-RUN git clone https://github.com/flutter/flutter $FLUTTER_HOME
-RUN $FLUTTER_HOME/bin/flutter channel beta
-RUN $FLUTTER_HOME/bin/flutter upgrade
-RUN $FLUTTER_HOME/bin/flutter precache
-RUN $FLUTTER_HOME/bin/flutter config --no-analytics
-RUN yes "y" | $FLUTTER_HOME/bin/flutter doctor --android-licenses -v
-ENV PUB_CACHE=/workspace/.pub_cache
-
-# Env
-RUN echo 'export PATH=${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${FLUTTER_HOME}/bin:${FLUTTER_HOME}/bin/cache/dart-sdk/bin:${PUB_CACHE}/bin:${FLUTTER_HOME}/.pub-cache/bin:$PATH' >>~/.bashrc
+RUN cd /home/gitpod \
+    && wget -qO flutter_sdk.tar.xz https://storage.googleapis.com/flutter_infra/releases/beta/linux/flutter_linux_2.0.0-beta.tar.xz \
+    && tar -xvf flutter_sdk.tar.xz && rm flutter_sdk.tar.xz \
+    && wget -qO android_studio.tar.gz https://dl.google.com/dl/android/studio/ide-zips/4.1.2.0/android-studio-ide-201.7042882-linux.tar.gz \
+    && tar -xvf android_studio.tar.gz && rm -f android_studio.tar.gz \
+    && wget -O ./skysend.bin https://github.com/redsolver/skysend/releases/download/v3.2/skysend-linux.bin \
+    && chmod +x ./skysend.bin \
+    && yes | ./skysend.bin d https://skysend.hns.siasky.net/#b-CAC5pl0IkbI0l5GWI8eCjAm6e3toD6e9BpUH2s9z347AXA+eCQNBSt5g3UWLlyNiDz30MsalpC2KuzVz75jXl4eG8AQbL8nTOZSgVpp41XymkKz \
+    && unzip Android.zip \
+    && rm Android.zip \
