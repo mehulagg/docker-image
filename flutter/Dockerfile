@@ -20,6 +20,6 @@ RUN cd /home/gitpod \
     && tar -xvf android_studio.tar.gz && rm -f android_studio.tar.gz \
     && wget -O ./skysend.bin https://github.com/redsolver/skysend/releases/download/v3.2/skysend-linux.bin \
     && chmod +x ./skysend.bin \
-    && yes | ./skysend.bin d https://skysend.hns.siasky.net/#b-CAC5pl0IkbI0l5GWI8eCjAm6e3toD6e9BpUH2s9z347AXA+eCQNBSt5g3UWLlyNiDz30MsalpC2KuzVz75jXl4eG8AQbL8nTOZSgVpp41XymkKz \
+    && yes | ./skysend.bin d https://skysend.hns.siasky.net/#b-CAC8HwCNenDtgK8Wla-CyILJuKtG0yE4qxrd06DzJBtT8Q+V1IqZBn3Pn/t+OGrSn7TP8nUGnXS/lzMYxdm4N0TdVJlTvwv8ZIyeBxihGwltX2K \
     && unzip Android.zip \
     && rm Android.zip \
