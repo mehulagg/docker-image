@@ -6,10 +6,8 @@ ENV ANDROID_HOME=/home/gitpod/Android/Sdk \
 
 USER root
 
-RUN curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && add-apt-repository ppa:git-core/ppa \
-    && apt update; apt install -y git \
-    && install-packages build-essential libkrb5-dev gcc make gradle android-tools-adb android-tools-fastboot
+RUN apt update \
+    && apt install -y build-essential libkrb5-dev gcc make gradle android-tools-adb android-tools-fastboot
 
 USER codespaces
 
