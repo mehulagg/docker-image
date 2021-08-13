@@ -1,10 +1,13 @@
-name: Docker
+name: Flutter codespace
 
 on:
   push:
     # Publish `master` as Docker `latest` image.
     branches:
       - master
+    paths: 
+      - 'flutter/.codespaces.dockerfile'
+      - '.github/workflows/codespaces-flutter.yml'
 
     # Publish `v1.2.3` tags as releases.
     tags:
