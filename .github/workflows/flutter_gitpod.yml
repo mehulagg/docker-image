@@ -1,10 +1,13 @@
-name: Docker
+name: Flutter gitpod
 
 on:
   push:
     # Publish `master` as Docker `latest` image.
     branches:
       - master
+    paths: 
+      - 'flutter/Dockerfile'
+      - '.github/workflows/flutter_gitpod.yml'
 
     # Publish `v1.2.3` tags as releases.
     tags:
